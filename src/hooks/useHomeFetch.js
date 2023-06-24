@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useContext } from 'react';
 // API
 import API from '../API';
 // helpers
 import { isPersistedState } from '../helpers';
+import { SearchContext } from '../Context/SearchContext';
 
 const initialState = {
   page: 0,
@@ -12,7 +13,7 @@ const initialState = {
 };
 
 export const useHomeFetch = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const { searchTerm } = useContext(SearchContext);
   const [state, setState] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -51,7 +52,7 @@ export const useHomeFetch = () => {
 
     // console.log('Grabbing from API');
     setState(initialState);
-
+    console.log(searchTerm);
     fetchMovies(1, searchTerm);
   }, [searchTerm]);
 
@@ -91,5 +92,5 @@ export const useHomeFetch = () => {
   //   }
   // }, [searchTerm, state]);
 
-  return { state, loading, error, setSearchTerm, searchTerm, setIsLoadingMore, lastMovieElementRef };
+  return { state, loading, error, searchTerm, setIsLoadingMore, lastMovieElementRef };
 };

@@ -15,6 +15,7 @@ export const Content = styled.div`
   width: 100%;
   max-width: var(--maxWidth);
   padding: 0 20px;
+  z-index: 99;
 
   span {
     font-size: var(--fontMed);

@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { PropTypes } from 'prop-types';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { SearchContext } from '../../Context/SearchContext';
+
 //image
 import searchIcon from '../../images/search-icon.svg';
 //styles
 import { Wrapper, Content } from './SearchBar.styles';
 
-const SearchBar = ({ setSearchTerm }) => {
-
+const SearchBar = () => {
+  const { setSearchTerm } = useContext(SearchContext);
   //search bar
   const [state, setState] = useState('');
   const initial = useRef(true);
@@ -14,7 +15,6 @@ const SearchBar = ({ setSearchTerm }) => {
   useEffect(() => {
     if (initial.current) {
       initial.current = false;
-
       return;
     }
 
@@ -39,13 +39,5 @@ const SearchBar = ({ setSearchTerm }) => {
     </Wrapper>
   );
 };
-
-SearchBar.propTypes = {
-  setSearchTerm: PropTypes.func,
-}
-
-SearchBar.defaultProps = {
-  setSearchTerm: '',
-}
 
 export default SearchBar;

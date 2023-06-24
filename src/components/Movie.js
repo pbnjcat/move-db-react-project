@@ -15,6 +15,7 @@ import { useMovieFetch } from '../hooks/useMovieFetch';
 import NoImage from '../images/no_image.jpg';
 
 const Movie = () => {
+
   const { movieId } = useParams();
 
   //rename deconstructured props

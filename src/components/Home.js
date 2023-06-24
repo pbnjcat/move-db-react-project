@@ -1,31 +1,23 @@
-import React from 'react';
-
-//Config
+import React, { useContext } from 'react';
 import { POSTER_SIZE, BACKDROP_SIZE, IMAGE_BASE_URL } from '../config';
-//components
 import HeroImage from './HeroImage';
 import Grid from './Grid';
 import Thumb from './Thumb';
 import Spinner from './Spinner';
 import SearchBar from './SearchBar';
-// import Button from './Button';
-
-//hook
 import { useHomeFetch } from '../hooks/useHomeFetch';
-//image
 import NoImage from '../images/no_image.jpg';
+import { SearchContext } from '../Context/SearchContext';
 
 const Home = () => {
   const {
     state,
     loading,
     error,
-    setSearchTerm,
-    searchTerm,
     lastMovieElementRef,
   } = useHomeFetch();
 
-  // console.log(state);
+  const { searchTerm, setSearchTerm } = useContext(SearchContext);
 
   if (error) {
     return <div>Something went wrong...</div>;
@@ -40,8 +32,6 @@ const Home = () => {
           text={state.results[0].overview}
         />
       ) : null}
-      <SearchBar setSearchTerm={setSearchTerm} />
-
       <Grid header={searchTerm ? 'Search Result' : 'Popular Movies'}>
         {state.results.map((movie) => (
           <Thumb
@@ -58,19 +48,14 @@ const Home = () => {
       </Grid>
 
       {state.results.map((movie, index) => {
-        // console.log(index);
         if (index === state.results.length - 1) {
           return <div ref={lastMovieElementRef} key={movie.id}></div>
-
         } else {
           return <div key={movie.id}></div>
         }
       })}
 
       {loading && <Spinner />}
-      {/* {state.page < state.total_pages && !loading && (
-        <Button text='Load More' callback= {() => setIsLoadingMore(true)} />
-      )} */}
     </>
   );
 };

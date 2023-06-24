@@ -2,47 +2,40 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
-  height: 100px;
   background: var(--darkGrey);
-  padding: 0 20px;
+  padding: 0px;
 `;
 
 export const Content = styled.div`
-  position: relative;
+  display: flex;
+  align-items: center;
   max-width: var(--maxWidth);
-  width: 50%;
-  height: 55px;
-  background: var(--medGrey);
-  margin: 0 auto;
-  border-radius: 40px;
-  color: var(--white);
+  width: 100%;
 
   .search-ico {
     position: absolute;
-    left: 15px;
-    top: 14px;
+    padding: 0;
+    margin-left: 10px;
     width: 30px;
+    height: 30px;
   }
 
   input {
-    font-size: var(--fontBig);
-    position: absolute;
-    left: 0;
-    margin: 8px 0;
-    padding: 0 0 0 60px;
-    border: 0;
-    width: 95%;
-    background: transparent;
+    flex: 1;
     height: 40px;
+    font-size: 1rem;
+    padding: 5px 200px 5px 50px; 
+    border: none;
+    border-radius: 20px;
+    background: var(--medGrey);
     color: var(--white);
 
-    :focus {
-      outline: none;
+    ::placeholder {
+      color: var(--white);
     }
   }
-
 `;
-
 
 

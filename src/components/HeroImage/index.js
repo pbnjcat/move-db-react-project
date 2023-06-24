@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from '../Button';
 //Styles
 import { Wrapper, Content, Text } from './HeroImage.styles';
 
@@ -7,6 +8,7 @@ const HeroImage = ({ image, title, text }) => (
   <Wrapper image={image}>
     <Content>
       <Text>
+        <Button text={'Watch \u23F5'} onClick/>
         <h1>{title}</h1>
         <p>{text}</p>
       </Text>
