@@ -17,9 +17,9 @@ export const Content = styled.div`
   .search-ico {
     position: absolute;
     padding: 0;
-    margin-left: 10px;
-    width: 30px;
-    height: 30px;
+    margin-left: 15px;
+    width: 20px;
+    height: auto;
   }
 
   input {

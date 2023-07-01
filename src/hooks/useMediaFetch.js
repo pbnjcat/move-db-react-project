@@ -1,31 +1,41 @@
 import { useState, useEffect } from 'react';
 import API from '../API';
-import { isPersistedState } from '../helpers';
 
-export const useMovieFetch = (movieId) => {
+export const useMediaFetch = (mediaId, mediaType) => {
   const [state, setState] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const fetchMovie = async () => {
+    console.log(mediaType);
+    const fetchMedia = async () => {
+
       try {
         setLoading(true);
         setError(false);
 
-        const movie = await API.fetchMovie(movieId);
-        const credits = await API.fetchCredits(movieId);
+        let media, credits;
 
-        // console.log("My log: " + JSON.stringify(movie.genres));
+        if (mediaType === 'movie') {
+          media = await API.fetchMovie(mediaId);
+          credits = await API.fetchMovieCredits(mediaId);
+          console.log(media);
+          console.log(credits);
+        }
+        else if (mediaType === 'show') {
+          media = await API.fetchShow(mediaId);
+          credits = await API.fetchShowCredits(mediaId);
 
-        // Get directors only
-        
+          console.log(media);
+          console.log(credits);
+        }
+
         const directors = credits.crew.filter(
           (member) => member.job === 'Director'
         );
 
         setState({
-          ...movie,
+          ...media,
           actors: credits.cast,
           directors,
         });
@@ -35,16 +45,8 @@ export const useMovieFetch = (movieId) => {
       }
     };
 
-    const sessionState = isPersistedState(movieId);
-
-    if (sessionState) {
-      setState(sessionState);
-      setLoading(false);
-      return;
-    }
-
-    fetchMovie();
-  }, [movieId]);
+    fetchMedia();
+  }, [mediaId, mediaType]);
 
   // // write to sessionStorage
   // useEffect(() => {

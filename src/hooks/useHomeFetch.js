@@ -1,8 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useContext } from 'react';
-// API
 import API from '../API';
-// helpers
-import { isPersistedState } from '../helpers';
 import { SearchContext } from '../Context/SearchContext';
 
 const initialState = {
@@ -12,24 +9,31 @@ const initialState = {
   total_results: 0,
 };
 
-export const useHomeFetch = () => {
+export const useHomeFetch = (mediaType) => {
   const { searchTerm } = useContext(SearchContext);
   const [state, setState] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  
-  const fetchMovies = async (page, searchTerm = '') => {
+
+  const fetchMedia = async (page, searchTerm = '') => {
     try {
       setError(false);
       setLoading(true);
+
+      let media;
       
-      const movies = await API.fetchMovies(searchTerm, page);
+      if (mediaType === 'movie') {
+        media = await API.fetchMovies(searchTerm, page);
+        console.log(media);
+      } else if (mediaType === 'show') {
+        media = await API.fetchSeries(searchTerm, page);
+      }
 
       setState((prev) => ({
-        ...movies,
+        ...media,
         results:
-          page > 1 ? [...prev.results, ...movies.results] : [...movies.results],
+          page > 1 ? [...prev.results, ...media.results] : [...media.results],
       }));
     } catch (error) {
       setError(true);
@@ -38,59 +42,46 @@ export const useHomeFetch = () => {
     setLoading(false);
   };
 
-  //initial and search
+  // initial media load and searching
   useEffect(() => {
-    if (!searchTerm) {
-      const sessionState = isPersistedState('homeState');
-
-      if (sessionState) {
-        // console.log('Grabbing from sessionStorage');
-        setState(sessionState);
-        return;
-      }
-    }
-
-    // console.log('Grabbing from API');
     setState(initialState);
-    console.log(searchTerm);
-    fetchMovies(1, searchTerm);
-  }, [searchTerm]);
-
-  // scrolling listener
+    fetchMedia(1, searchTerm);
+  }, [searchTerm, mediaType]);
 
   const observer = useRef();
-  const lastMovieElementRef = useCallback(node => {
-    if (loading) return
+  const lastMediaElementRef = useCallback(
+    (node) => {
+      if (loading) return;
 
-    if (observer.current) observer.current.disconnect();
+      if (observer.current) observer.current.disconnect();
 
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        // console.log('Visible')
-        setIsLoadingMore(true);
-      }
-    })
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          setIsLoadingMore(true);
+        }
+      });
 
-    if (node) observer.current.observe(node);
-    // console.log(node)
-  }, [loading, setIsLoadingMore]);
-
-  //Load more
+      if (node) observer.current.observe(node);
+    },
+    [loading, setIsLoadingMore]
+  );
 
   useEffect(() => {
     if (!isLoadingMore) {
       return;
     }
-    fetchMovies(state.page + 1, searchTerm);
+
+    fetchMedia(state.page + 1, searchTerm);
     setIsLoadingMore(false);
   }, [isLoadingMore, searchTerm, state.page]);
 
-  // // Write to sessionStorage
-  // useEffect(() => {
-  //   if (!searchTerm) {
-  //     sessionStorage.setItem('homeState', JSON.stringify(state));
-  //   }
-  // }, [searchTerm, state]);
-
-  return { state, loading, error, searchTerm, setIsLoadingMore, lastMovieElementRef };
+  return {
+    state,
+    loading,
+    error,
+    searchTerm,
+    setIsLoadingMore,
+    lastMediaElementRef,
+    fetchMedia,
+  };
 };

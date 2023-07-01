@@ -1,6 +1,8 @@
 import {
-  SEARCH_BASE_URL,
-  POPULAR_BASE_URL,
+  SEARCH_MOVIE_URL,
+  POPULAR_MOVIE_URL,
+  POPULAR_SERIES_URL,
+  SEARCH_SERIES_URL,
   API_URL,
   API_KEY,
   REQUEST_TOKEN_URL,
@@ -16,18 +18,35 @@ const defaultConfig = {
 };
 
 const apiSettings = {
+  // movie endpoints
   fetchMovies: async (searchTerm, page) => {
     const endpoint = searchTerm
-      ? `${SEARCH_BASE_URL}${searchTerm}&page=${page}`
-      : `${POPULAR_BASE_URL}&page=${page}`;
+      ? `${SEARCH_MOVIE_URL}${searchTerm}&page=${page}`
+      : `${POPULAR_MOVIE_URL}&page=${page}`;
     return await (await fetch(endpoint)).json();
   },
-  fetchMovie: async (movieId) => {
-    const endpoint = `${API_URL}movie/${movieId}?api_key=${API_KEY}`;
+  fetchMovie: async (mediaId) => {
+    const endpoint = `${API_URL}movie/${mediaId}?api_key=${API_KEY}`;
     return await (await fetch(endpoint)).json();
   },
-  fetchCredits: async (movieId) => {
-    const creditsEndpoint = `${API_URL}movie/${movieId}/credits?api_key=${API_KEY}`;
+  fetchMovieCredits: async (mediaId) => {
+    const creditsEndpoint = `${API_URL}movie/${mediaId}/credits?api_key=${API_KEY}`;
+    return await (await fetch(creditsEndpoint)).json();
+  },
+
+  // shows endpoints
+  fetchSeries: async (searchTerm, page) => {
+    const endpoint = searchTerm
+      ? `${SEARCH_SERIES_URL}${searchTerm}&page=${page}&include_adult=false`
+      : `${POPULAR_SERIES_URL}&page=${page}`;
+    return await (await fetch(endpoint)).json();
+  },
+  fetchShow: async (mediaId) => {
+    const endpoint = `${API_URL}tv/${mediaId}?api_key=${API_KEY}`;
+    return await (await fetch(endpoint)).json();
+  },
+  fetchShowCredits: async (mediaId) => {
+    const creditsEndpoint = `${API_URL}tv/${mediaId}/credits?api_key=${API_KEY}`;
     return await (await fetch(creditsEndpoint)).json();
   },
 

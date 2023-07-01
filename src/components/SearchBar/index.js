@@ -7,7 +7,7 @@ import searchIcon from '../../images/search-icon.svg';
 import { Wrapper, Content } from './SearchBar.styles';
 
 const SearchBar = () => {
-  const { setSearchTerm } = useContext(SearchContext);
+  const { searchTerm, setSearchTerm } = useContext(SearchContext);
   //search bar
   const [state, setState] = useState('');
   const initial = useRef(true);
@@ -17,13 +17,19 @@ const SearchBar = () => {
       initial.current = false;
       return;
     }
-
+    
     const timer = setTimeout(() => {
       setSearchTerm(state);
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [setSearchTerm, state]);
+  }, [state]);
+
+  useEffect(() => {
+    if (searchTerm === '') {
+      setState('');
+    }
+  }, [searchTerm]);
 
   return (
     <Wrapper>

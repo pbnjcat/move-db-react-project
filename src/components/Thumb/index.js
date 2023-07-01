@@ -6,15 +6,15 @@ import { Image } from './thumb.styles';
 
 // thumbnails for movie
 
-const Thumb = ({ image, movieId, clickable }) => (
+const Thumb = ({ image, mediaId, clickable }) => (
     <div>
         {clickable ? (
-            <Link to={`/${movieId}`}>
+            <Link to={`/${mediaId}`}>
                 <Image src={image} alt='movie-thumb' />
             </Link>
         ) 
         : ( 
-            <Image src={image} alt='movie-thumb' /> 
+            <Image src={image} alt='media-thumb' /> 
         )}
 
     </div>
@@ -22,7 +22,7 @@ const Thumb = ({ image, movieId, clickable }) => (
 
 Thumb.propTypes = {
     image: PropTypes.string,
-    movieId: PropTypes.number,
+    mediaId: PropTypes.number,
     clickable: PropTypes.bool,
 }
 

@@ -1,25 +1,33 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { SearchContext } from '../../Context/SearchContext';
 //Styles
 import { Wrapper, Content } from './BreadCrumb.styles';
 
-// Labels to show where viewer is on website
+const BreadCrumb = ({ mediaTitle }) => {
+  const { setSearchTerm } = useContext(SearchContext);
 
-const BreadCrumb = ({ movieTitle }) => (
+  // Function to clear the search term
+  const clearSearchTerm = () => {
+    setSearchTerm('');
+  };
+
+  return (
     <Wrapper>
-        <Content>
-            <Link to='/'>
-                <span> Home </span>
-            </Link>
-            <span>|</span>
-            <span>{movieTitle}</span>
-        </Content>
+      <Content>
+        <Link to="/" onClick={clearSearchTerm}>
+          <span> Home </span>
+        </Link>
+        <span>|</span>
+        <span>{mediaTitle}</span>
+      </Content>
     </Wrapper>
-)
+  );
+};
 
 BreadCrumb.propTypes = {
-    movieTitle: PropTypes.string,
-}
+  mediaTitle: PropTypes.string,
+};
 
 export default BreadCrumb;

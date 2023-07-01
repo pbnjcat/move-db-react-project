@@ -1,41 +1,40 @@
-import React, { useState, useEffect} from 'react';
+import React from 'react';
 import { Wrapper } from './DropdownMenu.styles';
 
-const DropdownMenu = () => {
-    const [open, setOpen] = useState(false);
-
-    useEffect (() => {
-        
-    })
-
+const DropdownMenu = ({ handleOptionClick, selectedOption }) => {
     const DropdownItem = (props) => {
-        return (
-            <li className='dropdown-item'>
-                <div> {props.text} </div>
-            </li>
-        );
-    }
+        return <div className="dropdown-item">{props.text}</div>;
+    };
+
+    const options = [
+        { label: 'Home', value: 'movie'},
+        { label: 'Movies', value: 'movie', dropdownItems: ['Dropdown Item 10', 'Dropdown Item 11', 'Dropdown Item 12'] },
+        { label: 'Series', value: 'show', dropdownItems: ['Dropdown Item 10', 'Dropdown Item 11', 'Dropdown Item 12'] },
+        { label: 'Popular', dropdownItems: ['Dropdown Item 10', 'Dropdown Item 11', 'Dropdown Item 12'] }
+    ];
+
     return (
         <Wrapper>
-            <div className='menu-container'>
-                <div className='menu-trigger' onClick={() => { setOpen(!open) }}>
-                    <h3>Home</h3>
-                    <h3>Genre</h3>
-                    <h3>Series</h3>
-                    <h3>Popular</h3>
-                </div>
-            </div>
-            <div className={`dropdown-menu ${open ? 'active' : 'inactive'}`}>
-                <ul>
-                    <h3>Sort By</h3>
-                    <DropdownItem text={'Movies'} />
-                    <DropdownItem text={'Series'} />
-                    <DropdownItem text={'Item 1'} />
-                    <DropdownItem text={'Item 1'} />
-                </ul>
+            <div className="menu-container">
+                {options.map((option) => (
+                    <div
+                        key={option.label}
+                        className={`dropdown ${option.value === selectedOption ? 'selected' : ''}`}
+                        onClick={() => handleOptionClick(option.value)}
+                    >
+                        <h3>{option.label}</h3>
+                        {option.dropdownItems && option.dropdownItems.length > 0 && (
+                            <div className="dropdown-content">
+                                {option.dropdownItems.map((dropdownItem) => (
+                                    <DropdownItem key={dropdownItem} text={dropdownItem} />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
         </Wrapper>
-    )
-}
+    );
+};
 
 export default DropdownMenu;

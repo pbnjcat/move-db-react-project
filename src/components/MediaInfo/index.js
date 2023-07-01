@@ -7,37 +7,37 @@ import { IMAGE_BASE_URL, POSTER_SIZE } from '../../config';
 //image
 import NoImage from '../../images/no_image.jpg';
 //styles
-import { Wrapper, Content, Text } from './MovieInfo.styles';
+import { Wrapper, Content, Text } from './MediaInfo.styles';
 
-// Grabs general information about a movie
+// Grabs general information about a media
 
-const MovieInfo = ({ movie }) => (
-  <Wrapper backdrop={movie.backdrop_path}>
+const MediaInfo = ({ media }) => (
+  <Wrapper backdrop={media.backdrop_path}>
     <Content>
       <Thumb
         image={
-          movie.poster_path
-            ? `${IMAGE_BASE_URL}${POSTER_SIZE}${movie.poster_path}`
+          media.poster_path
+            ? `${IMAGE_BASE_URL}${POSTER_SIZE}${media.poster_path}`
             : NoImage
         }
         clickable={false}
-        alt='movie-thumb'
+        alt='media-thumb'
       />
       <Text>
-        <h1>{movie.title}</h1>
+        <h1>{media.title}</h1>
         <h3>PLOT</h3>
-        <p>{movie.overview}</p>
+        <p>{media.overview}</p>
 
         <div className='rating-directors'>
           <div>
             <h3>RATING</h3>
             <div className='score'>
-              {Math.round(movie.vote_average * 10) / 10}
+              {Math.round(media.vote_average * 10) / 10}
             </div>
           </div>
           <div className='director'>
-            <h3>DIRECTOR{movie.directors.length > 1 ? 'S' : ''}</h3>
-            {movie.directors.map((director) => (
+            <h3>DIRECTOR{media.directors.length > 1 ? 'S' : ''}</h3>
+            {media.directors.map((director) => (
               <p key={director.credit_id}>{director.name}</p>
             ))}
           </div>
@@ -46,7 +46,7 @@ const MovieInfo = ({ movie }) => (
           <div>
             <h3>Genre</h3>
             <div className='genre-type'>
-              {movie.genres.map((genre, i) => (
+              {media.genres.map((genre, i) => (
                 <span key={i}>{genre.name}  </span>
               ))}
             </div>
@@ -57,8 +57,8 @@ const MovieInfo = ({ movie }) => (
   </Wrapper>
 );
 
-MovieInfo.propTypes = {
-  movie: PropTypes.object,
+MediaInfo.propTypes = {
+  media: PropTypes.object,
 }
 
-export default MovieInfo;
+export default MediaInfo;
