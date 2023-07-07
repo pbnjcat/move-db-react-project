@@ -14,7 +14,7 @@ import { useMediaFetch } from '../hooks/useMediaFetch';
 // Image
 import NoImage from '../images/no_image.jpg';
 
-const Media = ({ selectedOption }) => {
+const Media = ({ selectedOption, onThumbClick }) => {
   const { mediaId } = useParams();
   const { state: media, loading, error } = useMediaFetch(mediaId, selectedOption);
 
@@ -29,22 +29,25 @@ const Media = ({ selectedOption }) => {
   // Transform the data based on media type
   const transformedMedia = {
     id: media.id,
-    title: selectedOption === 'show' ? media.original_name : media.original_title,
+    title: selectedOption === 'tv' ? media.original_name : media.original_title,
     overview: media.overview,
     vote_average: media.vote_average,
-    directors: selectedOption === 'show' ? media.created_by : media.directors,
+    directors: selectedOption === 'tv' ? media.created_by : media.directors,
     genres: media.genres,
     poster_path: media.poster_path,
     backdrop_path: media.backdrop_path,
     actors: media.actors,
-    runtime: selectedOption === 'show' ? media.episode_run_time : media.runtime,
+    runtime: selectedOption === 'tv' ? media.episode_run_time : media.runtime,
     budget: media.budget,
     revenue: media.revenue,
   };
 
   return (
     <>
-      <BreadCrumb mediaTitle={transformedMedia.title} />
+      <BreadCrumb 
+        mediaTitle={transformedMedia.title} 
+        onClick={selectedOption === 'all' ? () => onThumbClick(media.media_type) : null} 
+      />
       <MediaInfo media={transformedMedia} selectedOption={selectedOption} />
       <MediaInfoBar
         time={transformedMedia.runtime}

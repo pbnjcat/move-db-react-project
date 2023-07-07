@@ -23,10 +23,12 @@ const Navbar = ({ handleOptionClick, selectedOption }) => {
           <LogoImg src={RMDBLogo} alt='rmdb-logo' />
         </Link>
         <SearchBar />
-        <DropdownMenu
-          handleOptionClick={handleOptionClick}
-          selectedOption={selectedOption}
-        />
+        <Link to='/' onClick={clearSearchTerm} >
+          <DropdownMenu
+            handleOptionClick={handleOptionClick}
+            selectedOption={selectedOption}
+          />
+        </Link>
       </Content>
     </Wrapper>
   )

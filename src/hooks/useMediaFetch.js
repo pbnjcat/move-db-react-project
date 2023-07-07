@@ -7,7 +7,6 @@ export const useMediaFetch = (mediaId, mediaType) => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    console.log(mediaType);
     const fetchMedia = async () => {
 
       try {
@@ -15,19 +14,17 @@ export const useMediaFetch = (mediaId, mediaType) => {
         setError(false);
 
         let media, credits;
-
+        if(mediaType === 'all') {
+          
+        }
         if (mediaType === 'movie') {
           media = await API.fetchMovie(mediaId);
           credits = await API.fetchMovieCredits(mediaId);
-          console.log(media);
-          console.log(credits);
+
         }
-        else if (mediaType === 'show') {
+        else if (mediaType === 'tv') {
           media = await API.fetchShow(mediaId);
           credits = await API.fetchShowCredits(mediaId);
-
-          console.log(media);
-          console.log(credits);
         }
 
         const directors = credits.crew.filter(

@@ -1,5 +1,3 @@
-// Home.js
-
 import React from 'react';
 import { POSTER_SIZE, BACKDROP_SIZE, IMAGE_BASE_URL } from '../config';
 import HeroImage from './HeroImage';
@@ -9,7 +7,7 @@ import Spinner from './Spinner';
 import { useHomeFetch } from '../hooks/useHomeFetch';
 import NoImage from '../images/no_image.jpg';
 
-const Home = ({ selectedOption }) => {
+const Home = ({ selectedOption, onThumbClick  }) => {
   const {
     state,
     loading,
@@ -24,14 +22,28 @@ const Home = ({ selectedOption }) => {
 
   return (
     <>
-      {!searchTerm && state.results[0] ? (
+      {!searchTerm && state.results.length > 0 && (
         <HeroImage
           image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${state.results[0].backdrop_path}`}
-          title={selectedOption === 'show' ? state.results[0].original_name : state.results[0].original_title}
+          title={
+            selectedOption === 'tv'
+              ? state.results[0].original_name
+              : state.results[0].original_title
+          }
           text={state.results[0].overview}
         />
-      ) : null}
-      <Grid header={searchTerm ? 'Search Result' : 'Popular Movies'}>
+      )}
+      <Grid
+        header={
+          searchTerm
+            ? 'Search Result'
+            : selectedOption === 'movie'
+              ? 'Popular Movies'
+              : selectedOption === 'tv'
+                ? 'Popular Shows'
+                : 'Trending Shows and Movies'
+        }
+      >
         {state.results.map((media) => (
           <Thumb
             key={media.id}
@@ -42,16 +54,25 @@ const Home = ({ selectedOption }) => {
                 : NoImage
             }
             mediaId={media.id}
-            title={selectedOption === 'show' ? media.original_name : media.original_title}
+            title={selectedOption === 'tv' ? media.original_name : media.original_title}
+            mediaType={media.media_type}
+            onClick={selectedOption === 'all' ? () => onThumbClick(media.media_type) : null}
           />
         ))}
       </Grid>
 
-      <div ref={lastMediaElementRef}></div>
+      {!loading && state.page < state.total_pages && (
+        <div ref={lastMediaElementRef}></div>
+      )}
 
       {loading && <Spinner />}
+
+      <div style={{ textAlign: 'center', margin: '40px' }}>
+        &copy; {new Date().getFullYear()} React Movie. All rights reserved.
+      </div>
     </>
   );
 };
+
 
 export default Home;

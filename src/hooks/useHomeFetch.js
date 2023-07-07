@@ -16,17 +16,21 @@ export const useHomeFetch = (mediaType) => {
   const [error, setError] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const fetchMedia = async (page, searchTerm = '') => {
+  const fetchMedia = useCallback(async (page, searchTerm = '') => {
     try {
       setError(false);
       setLoading(true);
 
       let media;
       
-      if (mediaType === 'movie') {
-        media = await API.fetchMovies(searchTerm, page);
+      if (mediaType === 'all') {
+        media = await API.fetchTrendingAllDaily(searchTerm, page);
         console.log(media);
-      } else if (mediaType === 'show') {
+      }
+      else if (mediaType === 'movie') {
+        media = await API.fetchMovies(searchTerm, page);
+      } 
+      else if (mediaType === 'tv') {
         media = await API.fetchSeries(searchTerm, page);
       }
 
@@ -40,13 +44,13 @@ export const useHomeFetch = (mediaType) => {
     }
 
     setLoading(false);
-  };
+  }, [mediaType]);
 
   // initial media load and searching
   useEffect(() => {
     setState(initialState);
     fetchMedia(1, searchTerm);
-  }, [searchTerm, mediaType]);
+  }, [searchTerm, mediaType, fetchMedia]);
 
   const observer = useRef();
   const lastMediaElementRef = useCallback(
@@ -67,7 +71,7 @@ export const useHomeFetch = (mediaType) => {
   );
 
   useEffect(() => {
-    if (!isLoadingMore) {
+    if (!isLoadingMore || mediaType === 'all') {
       return;
     }
 
@@ -82,6 +86,6 @@ export const useHomeFetch = (mediaType) => {
     searchTerm,
     setIsLoadingMore,
     lastMediaElementRef,
-    fetchMedia,
+    mediaType,
   };
 };

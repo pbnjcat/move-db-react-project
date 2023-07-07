@@ -3,21 +3,21 @@ import {
   POPULAR_MOVIE_URL,
   POPULAR_SERIES_URL,
   SEARCH_SERIES_URL,
+  TRENDING_ALL_URL,
+  MULTI_SEARCH_URL,
   API_URL,
   API_KEY,
-  REQUEST_TOKEN_URL,
-  LOGIN_URL,
-  SESSION_ID_URL,
 } from './config';
 
-const defaultConfig = {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-};
-
 const apiSettings = {
+  //Trending movies and shows and all search
+  fetchTrendingAllDaily: async (searchTerm, page) => {
+    const endpoint = searchTerm
+      ? `${MULTI_SEARCH_URL}${searchTerm}&page=${page}`
+      : `${TRENDING_ALL_URL}${API_KEY}&language=en-US`;
+    return await (await fetch(endpoint)).json();
+  },
+
   // movie endpoints
   fetchMovies: async (searchTerm, page) => {
     const endpoint = searchTerm
@@ -48,49 +48,6 @@ const apiSettings = {
   fetchShowCredits: async (mediaId) => {
     const creditsEndpoint = `${API_URL}tv/${mediaId}/credits?api_key=${API_KEY}`;
     return await (await fetch(creditsEndpoint)).json();
-  },
-
-
-  // Bonus material below for login
-  getRequestToken: async () => {
-    const reqToken = await (await fetch(REQUEST_TOKEN_URL)).json();
-    return reqToken.request_token;
-  },
-  authenticate: async (requestToken, username, password) => {
-    const bodyData = {
-      username,
-      password,
-      request_token: requestToken,
-    };
-    // First authenticate the requestToken
-    const data = await (
-      await fetch(LOGIN_URL, {
-        ...defaultConfig,
-        body: JSON.stringify(bodyData),
-      })
-    ).json();
-    // Then get the sessionId with the requestToken
-    if (data.success) {
-      const sessionId = await (
-        await fetch(SESSION_ID_URL, {
-          ...defaultConfig,
-          body: JSON.stringify({ request_token: requestToken }),
-        })
-      ).json();
-      return sessionId;
-    }
-  },
-  rateMovie: async (sessionId, movieId, value) => {
-    const endpoint = `${API_URL}movie/${movieId}/rating?api_key=${API_KEY}&session_id=${sessionId}`;
-
-    const rating = await (
-      await fetch(endpoint, {
-        ...defaultConfig,
-        body: JSON.stringify({ value }),
-      })
-    ).json();
-
-    return rating;
   },
 };
 

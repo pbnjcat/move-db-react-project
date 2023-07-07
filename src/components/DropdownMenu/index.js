@@ -7,10 +7,9 @@ const DropdownMenu = ({ handleOptionClick, selectedOption }) => {
     };
 
     const options = [
-        { label: 'Home', value: 'movie'},
+        { label: 'Home', value: 'all'},
         { label: 'Movies', value: 'movie', dropdownItems: ['Dropdown Item 10', 'Dropdown Item 11', 'Dropdown Item 12'] },
-        { label: 'Series', value: 'show', dropdownItems: ['Dropdown Item 10', 'Dropdown Item 11', 'Dropdown Item 12'] },
-        { label: 'Popular', dropdownItems: ['Dropdown Item 10', 'Dropdown Item 11', 'Dropdown Item 12'] }
+        { label: 'Series', value: 'tv', dropdownItems: ['Dropdown Item 10', 'Dropdown Item 11', 'Dropdown Item 12'] },
     ];
 
     return (
