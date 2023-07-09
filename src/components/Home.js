@@ -23,11 +23,10 @@ const Home = () => {
   if (error) {
     return <div>Something went wrong...</div>;
   }
-  
+
   const handleHeroClick = (mediaType) => {
     if (mediaType) {
       setMediaType(mediaType);
-      console.log('hero media: ' + mediaType);
     }
   };
 
@@ -74,7 +73,7 @@ const Home = () => {
         ))}
       </Grid>
 
-      {!loading && state.page < state.total_pages && (
+      {!loading && state.page < state.total_pages && !searchTerm && (
         <div ref={lastMediaElementRef}></div>
       )}
 
