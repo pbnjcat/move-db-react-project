@@ -33,7 +33,7 @@ export const useHomeFetch = () => {
       else if (mediaType === 'tv') {
         media = await API.fetchSeries(searchTerm, page);
       }
-      // console.log(media);
+      console.log(media);
 
       setState((prev) => ({
         ...media,

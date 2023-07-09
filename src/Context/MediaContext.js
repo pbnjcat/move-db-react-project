@@ -5,7 +5,7 @@ export const MediaContext = createContext();
 export const MediaProvider = ({ children }) => {
   const [mediaType, setMediaType] = useState(() => {
     const storedMediaType = localStorage.getItem('mediaType');
-    return storedMediaType || 'all';
+    return 'all' || storedMediaType;
   });
 
   const handleMediaTypeChange = (newMediaType) => {
