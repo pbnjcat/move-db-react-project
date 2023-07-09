@@ -16,7 +16,6 @@ const DropdownMenu = ({ mediaType, setMediaType }) => {
 
     const handleOptionClick = (value) => {
         setMediaType(value);
-        console.log('clicked ' + value);
     };
 
     return (
