@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import {MediaContext} from '../Context/MediaContext';
 import API from '../API';
 
-export const useMediaFetch = (mediaId, mediaType) => {
+export const useMediaFetch = (mediaId) => {
+  const { mediaType } = useContext(MediaContext)
   const [state, setState] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -14,9 +16,6 @@ export const useMediaFetch = (mediaId, mediaType) => {
         setError(false);
 
         let media, credits;
-        if(mediaType === 'all') {
-          
-        }
         if (mediaType === 'movie') {
           media = await API.fetchMovie(mediaId);
           credits = await API.fetchMovieCredits(mediaId);
@@ -44,11 +43,6 @@ export const useMediaFetch = (mediaId, mediaType) => {
 
     fetchMedia();
   }, [mediaId, mediaType]);
-
-  // // write to sessionStorage
-  // useEffect(() => {
-  //   sessionStorage.setItem(movieId, JSON.stringify(state));
-  // }, [movieId, state]);
 
   return { state, loading, error };
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 // Config
 import { IMAGE_BASE_URL, POSTER_SIZE } from '../config';
@@ -11,12 +11,16 @@ import MediaInfoBar from './MediaInfoBar';
 import Actor from './Actor';
 // Hooks
 import { useMediaFetch } from '../hooks/useMediaFetch';
+
+
+import { MediaContext } from '../Context/MediaContext';
 // Image
 import NoImage from '../images/no_image.jpg';
 
-const Media = ({ selectedOption, onThumbClick }) => {
+const Media = () => {
   const { mediaId } = useParams();
-  const { state: media, loading, error } = useMediaFetch(mediaId, selectedOption);
+  const { mediaType, setMediaType } = useContext(MediaContext);
+  const { state: media, loading, error } = useMediaFetch(mediaId, mediaType);
 
   if (loading) {
     return <Spinner />;
@@ -29,26 +33,26 @@ const Media = ({ selectedOption, onThumbClick }) => {
   // Transform the data based on media type
   const transformedMedia = {
     id: media.id,
-    title: selectedOption === 'tv' ? media.original_name : media.original_title,
+    title: mediaType === 'tv' ? media.original_name : media.original_title,
     overview: media.overview,
     vote_average: media.vote_average,
-    directors: selectedOption === 'tv' ? media.created_by : media.directors,
+    directors: mediaType === 'tv' ? media.created_by : media.directors,
     genres: media.genres,
     poster_path: media.poster_path,
     backdrop_path: media.backdrop_path,
     actors: media.actors,
-    runtime: selectedOption === 'tv' ? media.episode_run_time : media.runtime,
+    runtime: mediaType === 'tv' ? media.episode_run_time : media.runtime,
     budget: media.budget,
     revenue: media.revenue,
   };
 
   return (
     <>
-      <BreadCrumb 
-        mediaTitle={transformedMedia.title} 
-        onClick={selectedOption === 'all' ? () => onThumbClick(media.media_type) : null} 
+      <BreadCrumb
+        mediaTitle={transformedMedia.title}
+        onClick={mediaType === 'all' ? () => setMediaType(media.media_type) : null}
       />
-      <MediaInfo media={transformedMedia} selectedOption={selectedOption} />
+      <MediaInfo media={transformedMedia} mediaType={mediaType} />
       <MediaInfoBar
         time={transformedMedia.runtime}
         budget={transformedMedia.budget}

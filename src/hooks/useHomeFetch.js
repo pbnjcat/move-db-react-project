@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import API from '../API';
 import { SearchContext } from '../Context/SearchContext';
+import { MediaContext } from '../Context/MediaContext';
 
 const initialState = {
   page: 0,
@@ -9,7 +10,8 @@ const initialState = {
   total_results: 0,
 };
 
-export const useHomeFetch = (mediaType) => {
+export const useHomeFetch = () => {
+  const { mediaType } = useContext(MediaContext);
   const { searchTerm } = useContext(SearchContext);
   const [state, setState] = useState(initialState);
   const [loading, setLoading] = useState(false);
@@ -22,17 +24,16 @@ export const useHomeFetch = (mediaType) => {
       setLoading(true);
 
       let media;
-      
       if (mediaType === 'all') {
         media = await API.fetchTrendingAllDaily(searchTerm, page);
-        console.log(media);
       }
       else if (mediaType === 'movie') {
         media = await API.fetchMovies(searchTerm, page);
-      } 
+      }
       else if (mediaType === 'tv') {
         media = await API.fetchSeries(searchTerm, page);
       }
+      //console.log(media);
 
       setState((prev) => ({
         ...media,
@@ -77,15 +78,16 @@ export const useHomeFetch = (mediaType) => {
 
     fetchMedia(state.page + 1, searchTerm);
     setIsLoadingMore(false);
-  }, [isLoadingMore, searchTerm, state.page]);
+  }, [isLoadingMore, searchTerm, state.page, fetchMedia, mediaType]);
+
 
   return {
     state,
     loading,
     error,
     searchTerm,
-    setIsLoadingMore,
-    lastMediaElementRef,
     mediaType,
+    setIsLoadingMore,
+    lastMediaElementRef
   };
 };

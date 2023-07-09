@@ -6,11 +6,14 @@ import SearchBar from '../SearchBar';
 
 import { SearchContext } from '../../Context/SearchContext';
 
+import { MediaContext } from '../../Context/MediaContext';
+
 import { Wrapper, Content, LogoImg } from './Navbar.styles';
 
-const Navbar = ({ handleOptionClick, selectedOption }) => {
+const Navbar = () => {
+  const { mediaType, setMediaType } = useContext(MediaContext);
+  const { searchTerm, setSearchTerm } = useContext(SearchContext);
 
-  const { setSearchTerm } = useContext(SearchContext);
   // Function to clear the search term
   const clearSearchTerm = () => {
     setSearchTerm('');
@@ -19,19 +22,16 @@ const Navbar = ({ handleOptionClick, selectedOption }) => {
   return (
     <Wrapper>
       <Content>
-        <Link to='/' onClick={clearSearchTerm} >
-          <LogoImg src={RMDBLogo} alt='rmdb-logo' />
+        <Link to="/" onClick={clearSearchTerm}>
+          <LogoImg src={RMDBLogo} alt="rmdb-logo" />
         </Link>
-        <SearchBar />
-        <Link to='/' onClick={clearSearchTerm} >
-          <DropdownMenu
-            handleOptionClick={handleOptionClick}
-            selectedOption={selectedOption}
-          />
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <Link to="/" onClick={clearSearchTerm}>
+          <DropdownMenu mediaType={mediaType} setMediaType={setMediaType} />
         </Link>
       </Content>
     </Wrapper>
-  )
+  );
 };
 
 export default Navbar;

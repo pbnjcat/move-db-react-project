@@ -5,7 +5,7 @@ import { SearchContext } from '../../Context/SearchContext';
 //Styles
 import { Wrapper, Content } from './BreadCrumb.styles';
 
-const BreadCrumb = ({ mediaTitle, onClick }) => {
+const BreadCrumb = ({ mediaTitle }) => {
   const { setSearchTerm } = useContext(SearchContext);
 
   // Function to clear the search term
@@ -16,7 +16,7 @@ const BreadCrumb = ({ mediaTitle, onClick }) => {
   return (
     <Wrapper>
       <Content>
-        <Link to="/" onClick={clearSearchTerm} onClickHome={onClick}>
+        <Link to="/" onClick={clearSearchTerm} >
           <span> Home </span>
         </Link>
         <span>|</span>

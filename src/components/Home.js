@@ -1,32 +1,45 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { POSTER_SIZE, BACKDROP_SIZE, IMAGE_BASE_URL } from '../config';
 import HeroImage from './HeroImage';
 import Grid from './Grid';
 import Thumb from './Thumb';
 import Spinner from './Spinner';
 import { useHomeFetch } from '../hooks/useHomeFetch';
+
+import { MediaContext } from '../Context/MediaContext';
+
 import NoImage from '../images/no_image.jpg';
 
-const Home = ({ selectedOption, onThumbClick  }) => {
+const Home = () => {
+  const { mediaType, setMediaType } = useContext(MediaContext);
   const {
     state,
     loading,
     error,
     searchTerm,
     lastMediaElementRef,
-  } = useHomeFetch(selectedOption);
+  } = useHomeFetch();
 
   if (error) {
     return <div>Something went wrong...</div>;
   }
+  
+  const handleHeroClick = (mediaType) => {
+    if (mediaType) {
+      setMediaType(mediaType);
+      console.log('hero media: ' + mediaType);
+    }
+  };
 
   return (
     <>
       {!searchTerm && state.results.length > 0 && (
         <HeroImage
+          mediaId={state.results[0].id}
+          onClick={() => handleHeroClick(state.results[0].media_type)}
           image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${state.results[0].backdrop_path}`}
           title={
-            selectedOption === 'tv'
+            mediaType === 'tv'
               ? state.results[0].original_name
               : state.results[0].original_title
           }
@@ -37,9 +50,9 @@ const Home = ({ selectedOption, onThumbClick  }) => {
         header={
           searchTerm
             ? 'Search Result'
-            : selectedOption === 'movie'
+            : mediaType === 'movie'
               ? 'Popular Movies'
-              : selectedOption === 'tv'
+              : mediaType === 'tv'
                 ? 'Popular Shows'
                 : 'Trending Shows and Movies'
         }
@@ -54,9 +67,9 @@ const Home = ({ selectedOption, onThumbClick  }) => {
                 : NoImage
             }
             mediaId={media.id}
-            title={selectedOption === 'tv' ? media.original_name : media.original_title}
+            title={mediaType === 'tv' ? media.original_name : media.original_title}
             mediaType={media.media_type}
-            onClick={selectedOption === 'all' ? () => onThumbClick(media.media_type) : null}
+            onClick={mediaType === 'all' ? () => setMediaType(media.media_type) : null}
           />
         ))}
       </Grid>
