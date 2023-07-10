@@ -78,10 +78,6 @@ const Home = () => {
       )}
 
       {loading && <Spinner />}
-
-      <div style={{ textAlign: 'center', margin: '40px' }}>
-        &copy; {new Date().getFullYear()} React Movie. All rights reserved.
-      </div>
     </>
   );
 };

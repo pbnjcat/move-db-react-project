@@ -20,6 +20,9 @@ const App = () => (
         </Routes>
       </SearchProvider>
     </MediaProvider>
+    <div style={{ textAlign: 'center', margin: '40px' }}>
+      &copy; {new Date().getFullYear()} React Movie. All rights reserved.
+    </div>
     <GlobalStyle />
   </Router>
 );
